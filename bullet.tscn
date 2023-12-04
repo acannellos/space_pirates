@@ -1,0 +1,132 @@
+[gd_scene load_steps=20 format=3 uid="uid://rc200du7825i"]
+
+[ext_resource type="Script" path="res://Scripts/bullet.gd" id="1_s1r6w"]
+[ext_resource type="Resource" uid="uid://c5vjuow71y2h5" path="res://Assets/bullets/gem.tres" id="2_alc7i"]
+[ext_resource type="Resource" uid="uid://s4lqjoq7yjxy" path="res://Assets/bullets/torch.tres" id="3_k8y2y"]
+[ext_resource type="Resource" uid="uid://bkgmp02qie7qo" path="res://Assets/bullets/missle.tres" id="4_7frf1"]
+[ext_resource type="Shader" path="res://Assets/outline.gdshader" id="5_0883x"]
+[ext_resource type="Texture2D" uid="uid://butwgmtd4vbd3" path="res://Assets/atlas.tres" id="6_84frc"]
+[ext_resource type="Texture2D" uid="uid://4gimcwwjltjl" path="res://Assets/monochrome_tilemap_transparent_packed.png" id="7_qxpvo"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_aj38i"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 4.0
+angle_min = 35.0
+angle_max = 55.0
+angular_velocity_min = 5.0
+angular_velocity_max = 10.0
+gravity = Vector3(0, 98, 0)
+scale_min = 2.0
+scale_max = 2.0
+turbulence_enabled = true
+turbulence_noise_scale = 4.0
+
+[sub_resource type="Gradient" id="Gradient_nklw5"]
+offsets = PackedFloat32Array(0, 0.179012, 0.530864, 0.777778, 1)
+colors = PackedColorArray(0.533037, 0.533037, 0.533037, 1, 1, 1, 1, 1, 0.655657, 0.898783, 1, 1, 0.65098, 0.462745, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_vkcfe"]
+gradient = SubResource("Gradient_nklw5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rkrpa"]
+particle_flag_disable_z = true
+gravity = Vector3(0, 200, 0)
+scale_min = 8.0
+scale_max = 8.0
+color_ramp = SubResource("GradientTexture1D_vkcfe")
+turbulence_noise_scale = 2.0
+
+[sub_resource type="Gradient" id="Gradient_4e1dh"]
+offsets = PackedFloat32Array(0, 0.462963, 0.537037, 0.759259)
+colors = PackedColorArray(1, 0.85, 0, 1, 1, 0.383333, 0, 1, 0.165656, 0.165656, 0.165656, 1, 1, 1, 1, 0.470588)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mwkao"]
+gradient = SubResource("Gradient_4e1dh")
+
+[sub_resource type="Curve" id="Curve_2ug2o"]
+_data = [Vector2(0, 0.835165), 0.0, 0.0, 0, 0, Vector2(0.521053, 0.978022), 1.16923, 1.16923, 0, 0, Vector2(1, 0.241758), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_k1j1n"]
+curve = SubResource("Curve_2ug2o")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8xqen"]
+particle_flag_disable_z = true
+angle_min = -15.0
+angle_max = 15.0
+angular_velocity_min = -15.0
+angular_velocity_max = 15.0
+radial_velocity_min = 5.0
+radial_velocity_max = 10.0
+gravity = Vector3(0, 98, 0)
+scale_min = 4.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_k1j1n")
+color_ramp = SubResource("GradientTexture1D_mwkao")
+hue_variation_max = 0.05
+turbulence_enabled = true
+turbulence_noise_scale = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1280l"]
+atlas = ExtResource("7_qxpvo")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_om5cl"]
+size = Vector2(16, 16)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aux74"]
+resource_local_to_scene = true
+shader = ExtResource("5_0883x")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = false
+
+[node name="bullet" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_s1r6w")
+data = Array[Resource("res://Scripts/bullet_data.gd")]([ExtResource("3_k8y2y"), ExtResource("2_alc7i"), ExtResource("4_7frf1")])
+selected_bullet = 1
+
+[node name="particles" type="Node2D" parent="."]
+
+[node name="dots" type="GPUParticles2D" parent="particles"]
+visible = false
+position = Vector2(0, 12)
+emitting = false
+amount = 24
+process_material = SubResource("ParticleProcessMaterial_aj38i")
+randomness = 1.0
+
+[node name="trail" type="GPUParticles2D" parent="particles"]
+visible = false
+position = Vector2(0, 10)
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_rkrpa")
+local_coords = true
+trail_enabled = true
+
+[node name="fire" type="GPUParticles2D" parent="particles"]
+visible = false
+position = Vector2(0, 16)
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_8xqen")
+texture = SubResource("AtlasTexture_1280l")
+lifetime = 2.0
+randomness = 0.5
+local_coords = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("RectangleShape2D_om5cl")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_aux74")
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("6_84frc")

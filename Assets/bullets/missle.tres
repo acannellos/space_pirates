@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BulletData" load_steps=4 format=3 uid="uid://bkgmp02qie7qo"]
+
+[ext_resource type="Script" path="res://Scripts/bullet_data.gd" id="1_q86c3"]
+[ext_resource type="Texture2D" uid="uid://4gimcwwjltjl" path="res://Assets/monochrome_tilemap_transparent_packed.png" id="2_wxbfq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ru16"]
+atlas = ExtResource("2_wxbfq")
+region = Rect2(192, 0, 16, 16)
+
+[resource]
+script = ExtResource("1_q86c3")
+speed = 400.0
+acceleration = 0.02
+bullet_lifetime = 5
+texture = SubResource("AtlasTexture_4ru16")
+color = Color(0.576471, 0.631373, 0.631373, 1)
+selected_trail = 2

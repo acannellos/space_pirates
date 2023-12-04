@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dxw2t6i8voimx"]
+
+[ext_resource type="Shader" path="res://Assets/outline.gdshader" id="1_xsu4j"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_xsu4j")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = false
